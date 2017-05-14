@@ -7,9 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.single_list_item.*
 
-/**
- * Created by art on 12/05/2017.
- */
+
 open class SingleItemFragmen(item: String): Fragment(){
 
     val singleItem: String = item
@@ -21,7 +19,6 @@ open class SingleItemFragmen(item: String): Fragment(){
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         one_list_item.setText(singleItem)
-//        (one_list_item.adapter as String).notifyDataSetChanged()
     }
 
 }
