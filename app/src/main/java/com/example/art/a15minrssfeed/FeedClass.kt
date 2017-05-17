@@ -5,7 +5,7 @@ package com.example.art.a15minrssfeed
  */
 
 
- class Feed {
+ class FeedClass {
     val title: String? = null
     val id: String? = null
     val intro: String? = null
@@ -21,6 +21,4 @@ package com.example.art.a15minrssfeed
     val url: String? = null
     val slug: String? = null
     val commentCount: String? = null
-
-    constructor()
 }

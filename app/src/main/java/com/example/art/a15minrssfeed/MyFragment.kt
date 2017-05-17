@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.list_fragmen.*
 
 
+
 open class MyFragment(itemsList: Array<String>) : Fragment() {
 
 
@@ -21,7 +22,7 @@ open class MyFragment(itemsList: Array<String>) : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        list_fragment.adapter = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, itemsList)//arrayForTest
+        list_fragment.adapter = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, itemsList)//one_item_feed_title
         (list_fragment.adapter as ArrayAdapter<String>).notifyDataSetChanged()
         list_fragment.setOnItemClickListener { parent, view, position, id ->
             (activity as MainActivity).listItemClicked(position)  }
