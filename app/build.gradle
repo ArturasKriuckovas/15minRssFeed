@@ -14,6 +14,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -38,13 +39,14 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.4.0'
 
     // GSON with Retrofit
-    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.github.salomonbrys.kotson:kotson:2.5.0'
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
 
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 //    compile 'com.android.support:recyclerview-v7:25.3.1'
 //    compile 'com.android.support:design:25.3.1'
+    compile 'com.android.support:multidex:1.0.1'
 }
 repositories {
     mavenCentral()
