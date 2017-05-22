@@ -52,10 +52,6 @@ class MainActivity : AppCompatActivity() {
     inner class DownloadRssFeed : AsyncTask<String, Int, String>() {
 
 
-        val REQUEST_METHOD: String = "GET"
-        val READ_TIMEOUT: Int = 15000
-        val CONNECTION_TIMEOUT: Int = 15000
-
         val LOG_TAG = javaClass.simpleName
         var proDialog: ProgressDialog? = null
         override fun onPreExecute() {
