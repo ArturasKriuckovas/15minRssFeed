@@ -1,5 +1,6 @@
 package com.example.art.a15minrssfeed
 
+import android.app.ProgressDialog
 import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -11,14 +12,18 @@ import com.google.gson.JsonParser
 import java.net.URL
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
+import org.json.JSONException
 import java.io.BufferedReader
+import java.io.IOError
+import java.io.IOException
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 
 
 class MainActivity : AppCompatActivity() {
     val arrayForTest: Array<String> = arrayOf("11", "12", "13id", "14", "15", "16", "17", "18", "19", "20", "asd", "asdga", "asdasd")
-//
+    val myUrl: String = "https://content.guardianapis.com/search?q=debate&tag=politics/politics&from-date=2014-01-01&api-key=test"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,15 +33,15 @@ class MainActivity : AppCompatActivity() {
 //        val response = JsonReaderr().response
 //        Log.d(javaClass.simpleName, response.toString())
 
-//        val myUrl: String = "https://content.guardianapis.com/search?q=debate&tag=politics/politics&from-date=2014-01-01&api-key=test"
+//nuo cia//        val myUrl: String = "https://content.guardianapis.com/search?q=debate&tag=politics/politics&from-date=2014-01-01&api-key=test"
 //        val getJsonDownlad = DownloadRssFeed()
-//        val result: String = getJsonDownlad.execute(myUrl).get()
+//        val result: String = getJsonDownlad.execute(myUrl).get()// get nereikia!!!!!
 
 //        val response = JsonReaderr(result).response
-//        Log.d(javaClass.simpleName, response.toString())
+//iki cia//        Log.d(javaClass.simpleName, response.toString())
 
 
-//        DownloadRssFeed().execute(myUrl)
+        DownloadRssFeed().execute(myUrl)
 
     }
 
@@ -63,47 +68,44 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    class DownloadRssFeed : AsyncTask<String, Int, String>() {
+    inner class DownloadRssFeed : AsyncTask<String, Int, String>() {
+
 
         val REQUEST_METHOD: String = "GET"
         val READ_TIMEOUT: Int = 15000
         val CONNECTION_TIMEOUT: Int = 15000
 
         val LOG_TAG = javaClass.simpleName
-
-        override fun onPreExecute() {//nereiks
+        var proDialog: ProgressDialog? = null
+        override fun onPreExecute() {
             Log.d(LOG_TAG, "onPreExecute()ooooooooooooooooooooooooooooo")
             super.onPreExecute()
+            proDialog = ProgressDialog(this@MainActivity)
+//            val proDialog: ProgressDialog = ProgressDialog(this@MainActivity)
+            proDialog!!.setMessage("Loading...")
+            proDialog!!.setCancelable(false)
+            proDialog!!.show()
+
         }
 
-        override fun doInBackground(vararg params: String?): String? {
+        override fun doInBackground(vararg params: String?): String? {//viska keist
 
             val stringUrl: String = params[0].toString()
-            val result: String
-            var inputLine: String
-
-            val myUrl: URL = URL(stringUrl)
-            val connection: HttpURLConnection = myUrl.openConnection() as HttpURLConnection
-
-            connection.requestMethod = REQUEST_METHOD
-            connection.readTimeout = READ_TIMEOUT
-            connection.connectTimeout = CONNECTION_TIMEOUT
-
-            connection.connect()
-
-            val streamReader: InputStreamReader = InputStreamReader(connection.getInputStream())
-            val reader: BufferedReader = BufferedReader(streamReader)
-            val stringBuilder: StringBuilder = StringBuilder()
-            inputLine = reader.readLine()
-            while (inputLine != null) {
-                stringBuilder.append(inputLine)
+            val result: String? = try {
+                val myUrl: URL = URL(stringUrl)
+                val connection: HttpURLConnection = myUrl.openConnection() as HttpURLConnection //CIA KAZKAS NEGERAI!!!
+                connection.inputStream.bufferedReader().readText()
+            } catch(e: JSONException) {
+                e.printStackTrace()
+                "mdfk"
+//                null
+            } catch(e: IOException) {
+                e.printStackTrace()
+                "mdfk2"
+//                null
             }
-            reader.close()
-            streamReader.close()
-            result = streamReader.toString()
-
             Log.d(LOG_TAG, "doInBackground(vararg)uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu")//delete later all logs
-            return result
+            return result.toString() //erroras -> mdfk2 gaunu
         }
 
 //         override fun onProgressUpdate(vararg values: Int?) {
@@ -114,6 +116,9 @@ class MainActivity : AppCompatActivity() {
         override fun onPostExecute(result: String?) {
             Log.d(LOG_TAG, "onPostExecute(vararg)aaaaaaaaaaaaaaaaaaaaaaaaaaa")
             super.onPostExecute(result)
+            if (proDialog!!.isShowing){
+                proDialog!!.dismiss()
+            }
         }
 
     }
