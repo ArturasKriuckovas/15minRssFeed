@@ -18,7 +18,7 @@ open class SingleItemFragmen(item: String): Fragment(){
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        one_item_feed_title.setText(singleItem) //one_list_item
+        web_title.setText(singleItem) //one_list_item kolkas erroras, reiks pasidaryt kad jsona i normalu elementa parsintu
     }
 
 }

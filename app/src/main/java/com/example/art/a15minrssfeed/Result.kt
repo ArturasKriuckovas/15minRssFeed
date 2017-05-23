@@ -3,6 +3,7 @@ package com.example.art.a15minrssfeed
 /**
  * Created by art on 17/05/2017.
  */
+import com.google.gson.annotations.SerializedName
 import java.util.HashMap
 
 data class Result(

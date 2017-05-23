@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
+import com.google.gson.Gson
 import java.net.URL
 import org.json.JSONException
 import java.io.IOException
@@ -15,7 +16,6 @@ import java.net.HttpURLConnection
 class MainActivity : AppCompatActivity() {
     val arrayForTest: Array<String> = arrayOf("11", "12", "13id", "14", "15", "16", "17", "18", "19", "20", "asd", "asdga", "asdasd")
     val myUrl: String = "https://content.guardianapis.com/search?q=debate&tag=politics/politics&from-date=2014-01-01&api-key=test"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -49,13 +49,12 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    inner class DownloadRssFeed : AsyncTask<String, Int, String>() {
+    inner class DownloadRssFeed : AsyncTask<String, Int, List<Result>>() {
 
-
-        val LOG_TAG = javaClass.simpleName
+        val LOG_TAG = javaClass.simpleName//
         var proDialog: ProgressDialog? = null
         override fun onPreExecute() {
-            Log.d(LOG_TAG, "onPreExecute()ooooooooooooooooooooooooooooo")
+            Log.d(LOG_TAG, "onPreExecute()ooooooooooooooooooooooooooooo")//
             super.onPreExecute()
             proDialog = ProgressDialog(this@MainActivity)
             proDialog!!.setMessage("Loading...")
@@ -64,10 +63,10 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        override fun doInBackground(vararg params: String?): String? {
+        override fun doInBackground(vararg params: String?): List<Result> {
 
             val stringUrl: String = params[0].toString()
-            val result: String? = try {
+            val resultQuery: String? = try {
                 val myUrl: URL = URL(stringUrl)
                 val connection: HttpURLConnection = myUrl.openConnection() as HttpURLConnection
                 connection.inputStream.bufferedReader().readText()
@@ -79,16 +78,18 @@ class MainActivity : AppCompatActivity() {
                 null
             }
             Log.d(LOG_TAG, "doInBackground(vararg)uuuuuuuuuuuuuuuuuuuuuuuuuuuuuu")//delete later all logs
-            return result.toString()
+            val response: ResponseDto = Gson().fromJson(resultQuery, ResponseDto::class.java)
+            val result: List<Result> = response.response.results
+            return result
         }
 
          override fun onProgressUpdate(vararg values: Int?) {
-             Log.d(LOG_TAG, "onProgressUpdate(vararg)eeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+             Log.d(LOG_TAG, "onProgressUpdate(vararg)eeeeeeeeeeeeeeeeeeeeeeeeeeeee")//
              super.onProgressUpdate(*values)
          }
 
-        override fun onPostExecute(result: String?) {
-            Log.d(LOG_TAG, "onPostExecute(vararg)aaaaaaaaaaaaaaaaaaaaaaaaaaa")
+        override fun onPostExecute(result: List<Result>) {
+            Log.d(LOG_TAG, "onPostExecute(vararg)aaaaaaaaaaaaaaaaaaaaaaaaaaa")//
             super.onPostExecute(result)
             if (proDialog!!.isShowing){
                 proDialog!!.dismiss()
